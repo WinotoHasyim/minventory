@@ -574,15 +574,22 @@ Penerapan Clean Architecture pada aplikasi Flutter melibatkan pembagian kode men
 
 - Lapisan Presentasi (Presentation Layer): Ini adalah lapisan yang bertanggung jawab untuk tampilan dan interaksi pengguna. Di Flutter, ini termasuk widget, pages, dan manajemen state seperti `Provider`, `Riverpod`, atau `Bloc`.
 
-- Lapisan Bisnis (Domain Layer): Ini adalah lapisan yang berisi aturan bisnis dan logika aplikasi. Tidak bergantung pada framework atau teknologi tertentu.
-Implementasi:
+- Lapisan Bisnis (Domain Layer): Ini adalah lapisan yang berisi aturan bisnis dan logika aplikasi. Tidak bergantung pada framework atau teknologi tertentu. 
+<br>
+Implementasi: 
+<br>
 Entities: Mendefinisikan objek bisnis atau entitas.
-Use Cases: Mendefinisikan aturan bisnis atau skenario penggunaan.
-Repositories: Menentukan kontrak antarmuka untuk mengakses data.
+<br>
+Use Cases: Mendefinisikan aturan bisnis atau skenario penggunaan. 
+<br>
+Repositories: Menentukan kontrak antarmuka untuk mengakses data. 
 
 - Lapisan Data (Data Layer): Ini adalah lapisan yang bertanggung jawab untuk mengakses data dari berbagai sumber seperti API, database, atau penyimpanan lokal.
+<br>
 Implementasi:
+<br>
 Data Sources: Mengimplementasikan cara akses data (remote dan local).
+<br>
 Repositories Implementation: Mengimplementasikan kontrak dari repository di lapisan domain.
 
 </details>
