@@ -1,6 +1,593 @@
 # Minventory
 
 <details>
+<summary>Tugas 8 PBP</summary>
+<br>
+
+## Cara implementasi poin-poin pada tugas
+
+1. Buatlah 2 direktori baru pada `lib` bernama `screens`, kemudian pindahkan file `menu.dart` ke dalam direktori `screens`.
+
+2. Buatlah file baru bernama `left_drawer.dart` pada direktori `widgets`.
+
+3. pada file tersebut, lakukan import:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/screens/menu.dart';
+```
+Selanjutnya, isi kode berikut:
+```
+class LeftDrawer extends StatelessWidget {
+  const LeftDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Minventory',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(10)),
+                Text(
+                  "Kelola item milik anda!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Halaman Utama'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyHomePage(),
+                  ));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+Kode ini berfungsi membuat sebuah drawer yang memiliki header dan deskripsi dari app Minventory ini. Selain itu, drawer ini akan memiliki `ListTile` yang jika ditekan akan memunculkan screen halaman utama
+
+4. Pada file `menu.dart`, tambahkan import dan kode berikut:
+```
+...
+import 'package:minventory/widgets/left_drawer.dart';
+...
+Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Minventory',
+        ),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
+      drawer: const LeftDrawer(),
+...
+```
+Hal yang ditambahkan di `Scaffold` ini adalah drawer, yang berarti pada halaman utama ini nantinya muncul drawer.
+
+5. Pada direktori `screens`, buat file baru bernama `inventory_form.dart` dan isilah kode berikut pada file tersebut:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/widgets/left_drawer.dart';
+
+class InventoryFormPage extends StatefulWidget {
+  const InventoryFormPage({super.key});
+
+  @override
+  State<InventoryFormPage> createState() => _InventoryFormPageState();
+}
+
+class _InventoryFormPageState extends State<InventoryFormPage> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = "";
+  int _amount = 0;
+  String _description = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text(
+            'Form Tambah Item',
+          ),
+        ),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      drawer: const LeftDrawer(),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Nama Item",
+                      labelText: "Nama Item",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _name = value!;
+                      });
+                    },
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "Nama tidak boleh kosong!";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Jumlah Item",
+                      labelText: "Jumlah Item",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _amount = int.parse(value!);
+                        });
+                    },
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "Jumlah Item tidak boleh kosong!";
+                      }
+                      if (int.tryParse(value) == null) {
+                        return "Jumlah Item harus berupa angka!";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Deskripsi",
+                      labelText: "Deskripsi",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _description = value!;
+                      });
+                    },
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "Deskripsi tidak boleh kosong!";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.deepPurple),
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Item berhasil tersimpan'),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Nama: $_name'),
+                                      Text('Jumlah: $_amount'),
+                                      Text('Deskripsi: $_description')
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          _formKey.currentState!.reset();
+                        }
+                      },
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ),
+      ),
+    );
+  }
+}
+```
+Kode diatas berfungsi membuat Stateful Widget bernama `InventoryFormPage` yang berupa screen/halaman untuk membuat Item sesuai data-data (nama, jumlah, deskripsi) yang kita input untuk Item tersebut. Halaman Form ini juga akan menampilkan drawer. `_formKey` disini berfungsi sebagai handler dari form state, validasi form, dan penyimpanan form. Setiap perubahan pada field/data Item akan mengupdate variabel field/data pada class `InventoryFormPage`. Input dari user juga akan divalidasi sesuai dengan tipe data field yang diinput dengan `validator`. Selain itu, ketika tombol save ditekan, maka sebuah pop-up akan muncul yang berisi Item dan field dari Item yang kita input
+
+6. Pada file `menu.dart` Tambahkan kode baru pada widget `PromptCard` sehingga terlihat seperti berikut:
+```
+...
+return Material(
+  child: InkWell(
+    // Area responsive terhadap sentuhan
+    onTap: () {
+      // Memunculkan SnackBar ketika diklik
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+            content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+      // Navigate ke route yang sesuai (tergantung jenis tombol)
+      if (item.name == "Tambah Item") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const InventoryFormPage(),
+            ));
+      }
+...
+```
+Kode ini bertujuan agar tombol dengan nama `Tambah Item` menampilkan Halaman Form
+
+7. Buatlah file baru bernama `prompt_card.dart` pada direktori `widgets`
+
+8. Di file `menu.dart` tadi, pindahkan widget `InventoryPrompt` dan `PromptCard` ke file `prompt_card.dart`. Kemudian, tambahkan import pada awal file `prompt_card.dart`:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/screens/inventory_form.dart';
+...
+```
+Di file `menu.dart` juga, lakukan import pada awal file:
+```
+...
+import 'package:minventory/widgets/prompt_card.dart';
+...
+```
+
+9. Tambahkan routing pada `left_drawer.dart` untuk Halaman Utama dan Halaman Form:
+```
+...
+ListTile(
+    leading: const Icon(Icons.home_outlined),
+    title: const Text('Halaman Utama'),
+    // Bagian redirection ke MyHomePage
+    onTap: () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(),
+          ));
+    },
+),
+ListTile(
+    leading: const Icon(Icons.add_box_rounded),
+    title: const Text('Tambah Item'),
+    // Bagian redirection ke ShopFormPage
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const InventoryFormPage(),
+        ));
+    },
+)
+...
+```
+
+10. Import Halaman Form ke `left_drawer.dart`:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/screens/menu.dart';
+import 'package:minventory/screens/inventory_form.dart';
+...
+```
+
+11. (Penjelasan Bonus) Buatlah sebuah file baru bernama `inventory_list.dart` pada direktory `screens` dan isi kode berikut pada file:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/widgets/left_drawer.dart';
+
+class InventoryItem {
+  String name;
+  int amount;
+  String description;
+
+  InventoryItem(this.name, this.amount, this.description);
+}
+
+List<InventoryItem> inventoryItemList = [];
+
+class InventoryListPage extends StatelessWidget {
+  final List<InventoryItem> items = inventoryItemList;
+
+  InventoryListPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text(
+            'List Item',
+          ),
+        ),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      drawer: const LeftDrawer(),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.deepPurple,
+                  child: Text(
+                    items[index].name[0],
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                title: Text(items[index].name),
+                subtitle: Text(items[index].description),
+                trailing: Text('Jumlah: ${items[index].amount}'),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+Di kode tersebut, didefinisikan objek model `InventoryItem`. Selain itu, terdapat list yang menyimpan objek InventoryItem dan list tersebut awalnya kosong. Kemudian ada widget `InventoryListPage` yang berfungsi menampilkan list item yang kita punya menggunakan `ListView.builder`
+
+12. (Penjelasan Bonus) Pada file `left_drawer.dart`, import `inventory_list.dart`:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/screens/menu.dart';
+import 'package:minventory/screens/inventory_form.dart';
+import 'package:minventory/screens/inventory_list.dart';
+...
+```
+Setelah itu, tambahkan `ListTile` yang berfungsi sebagai route ke halaman list Item (ListTile diantara Halaman Utama dan Halaman Form):
+```
+...
+ListTile(
+    leading: const Icon(Icons.home_outlined),
+    title: const Text('Halaman Utama'),
+    // Bagian redirection ke MyHomePage
+    onTap: () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(),
+          ));
+    },
+),
+ListTile(
+    leading: const Icon(Icons.check_box),
+    title: const Text('Lihat Item'),
+    // Bagian redirection ke ShopFormPage
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InventoryListPage(),
+          ));
+    },
+),
+ListTile(
+    leading: const Icon(Icons.add_box_rounded),
+    title: const Text('Tambah Item'),
+    // Bagian redirection ke ShopFormPage
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const InventoryFormPage(),
+        ));
+    },
+),
+...
+```
+
+13. (Penjelasan Bonus) Pada file `inventory_form.dart`, import `inventory_list.dart`:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/widgets/left_drawer.dart';
+import 'package:minventory/screens/inventory_list.dart';
+...
+```
+Setelah itu, tambahkan function baru pada widget `build` di file `inventory_form.dart`:
+```
+...
+Widget build(BuildContext context) {
+    void saveItem() {
+      InventoryItem newInventoryItem = InventoryItem(_name, _amount, _description);
+      inventoryItemList.add(newInventoryItem);
+}
+...
+```
+Function di atas berfungsi untuk menambahkan item baru ke `inventoryItemList`. Tambahkan implementasi function tersebut pada tombol Save sehingga kode seperti berikut:
+```
+...
+Align(
+  alignment: Alignment.bottomCenter,
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor:
+        MaterialStateProperty.all(Colors.deepPurple),
+      ),
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          saveItem();
+...
+```
+
+14. (Penjelasan Bonus) Pada file `prompt_card.dart`, import `inventory_list.dart`:
+```
+import 'package:flutter/material.dart';
+import 'package:minventory/screens/inventory_form.dart';
+import 'package:minventory/screens/inventory_list.dart';
+...
+```
+Setelah itu, tambahkan routing untuk Halaman List Item agar ketika tombol `Lihat Item` diklik, screen akan menampilkan halaman List Item:
+```
+...
+return Material(
+  child: InkWell(
+    // Area responsive terhadap sentuhan
+    onTap: () {
+      // Memunculkan SnackBar ketika diklik
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+            content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+      // Navigate ke route yang sesuai (tergantung jenis tombol)
+      if (item.name == "Tambah Item") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const InventoryFormPage(),
+            ));
+      }
+      else if (item.name == "Lihat Item") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InventoryListPage(),
+            ));
+      }
+
+    },
+...
+```
+
+15. Lakukan `add`-`commit`-`push` ke GitHub
+
+## Pertanyaan
+
+### Jelaskan perbedaan antara Navigator.push() dan Navigator.pushReplacement(), disertai dengan contoh mengenai penggunaan kedua metode tersebut yang tepat!
+
+Perbedaan antara `Navigator.push()` dan `Navigator.pushReplacement()` terletak pada apa yang dilakukan kepada route yang berada pada atas stack `Navigator`. `push()` akan menambahkan route baru diatas route yang sudah ada pada atas stack, sedangkan `pushReplacement()` menggantikan route yang sudah ada pada atas stack dengan route baru tersebut. Dalam proyek flutter `minventory` ini, `pushReplacement()` digunakan pada saat tombol `Halaman Utama` pada drawer diklik. Hal ini membuat route yang sekarang dipakai (misalnya halaman form) diganti dengan route halaman utama. Akibatnya, jika ditekan tombol back, maka route yang sekarang dipakai bukanlah route halaman form tadi, tetapi route lain (misalnya list item), atau bisa juga keluar dari app. Selain itu, `push()` digunakan pada saat tombol `Tambah Item` pada drawer diklik. Hal ini membuat route tambah item berada di atas route yang sekarang dipakai (misalnya halaman utama) sehingga route yang sekarang dipakai adalah route tambah item. Ketika user menekan tombol back, maka route yang akan dipakai sekarang adalah route tadi (route halaman utama).
+
+### Jelaskan masing-masing layout widget pada Flutter dan konteks penggunaannya masing-masing!
+
+Single-child layout widgets:
+
+- Container: widget dasar yang dapat mengandung widget lain dan menyediakan kontrol atas propertinya seperti margin, padding, dan dekorasi. Digunakan untuk mengelompokkan dan mengatur widget lain, 
+
+- Center: widget yang menempatkan widget anak di tengah parent widget. Digunakan untuk memusatkan widget anak di tengah parent
+
+- Align: widget untuk menempatkan widget anak di posisi yang dapat diatur. Digunakan untuk mengatur posisi widget anak dengan presisi.
+
+- Expanded: widget yang memperluas anak-anaknya dalam widget Flex (seperti Column atau Row) untuk mengisi ruang yang tersedia. Digunakan untuk memberikan bagian proporsional dari ruang kepada setiap widget dalam Flex.
+
+- FractionallySizedBox: widget yang menempatkan satu anak (child) di dalamnya dengan ukuran relatif terhadap ukuran parentnya. Digunakan untuk membuat widget anak mengambil sebagian dari ukuran parent widget.
+
+- SizedBox: widget yang memaksakan ukuran tetap pada satu anak. Digunakan untuk menentukan ukuran widget anak dengan tepat.
+
+- AspectRatio: widget yang mempertahankan rasio aspek dari satu anak (child) di dalamnya. Digunakan untuk mempertahankan rasio aspek pada widget anak.
+
+Multi-child layout widget:
+
+- Row dan Column: Row adalah widget yang menyusun widget anaknya secara horizontal, sedangkan Column menyusun widget anaknya secara vertikal. Digunakan untuk menyusun elemen-elemen sejajar atau bertumpuk dalam satu arah.
+
+- ListView: widget yang mengatur anak-anaknya dalam daftar bergulir. Dapat digunakan untuk menampilkan daftar item atau elemen dalam satu arah (vertikal atau horizontal). Digunakan untuk menampilkan daftar item yang mungkin sangat panjang sehingga perlu di-scroll.
+
+- GridView: widget yang menyusun anak-anaknya dalam suatu grid. Dapat digunakan untuk menampilkan data dalam format grid. Digunakan untuk menampilkan item dalam format grid, seperti galeri gambar atau produk.
+
+- Stack: widget yang menempatkan anak-anaknya di atas satu sama lain. Anak-anak tersebut dapat diatur secara relatif terhadap tata letak stack. Digunakan untuk menumpuk widget, memberikan lapisan visual seperti overlay atau elemen yang saling tumpang tindih.
+
+- Wrap: widget yang menyusun anak-anaknya dalam baris dan kolom sesuai dengan ruang yang tersedia. Digunakan untuk menempatkan widget dalam baris dan kolom, dan ingin widget tersebut melibatkan baris/kolom baru jika tidak cukup ruang.
+
+### Sebutkan apa saja elemen input pada form yang kamu pakai pada tugas kali ini dan jelaskan mengapa kamu menggunakan elemen input tersebut!
+
+- TextFormField untuk Nama dan Deskripsi Item: Digunakan untuk mengambil input teks dari user, khususnya untuk nama item dan deskripsi item. TextFormField memberikan interface input teks dengan validasi yang mudah diimplementasikan.
+
+- TextFormField untuk Jumlah Item: Digunakan untuk mengambil input teks dari user untuk jumlah item. TextFormField juga digunakan di sini karena memungkinkan validasi dan konversi ke tipe data numerik.
+
+### Bagaimana penerapan clean architecture pada aplikasi Flutter?
+
+Penerapan Clean Architecture pada aplikasi Flutter melibatkan pembagian kode menjadi tiga lapisan utama:
+
+- Lapisan Presentasi (Presentation Layer): Ini adalah lapisan yang bertanggung jawab untuk tampilan dan interaksi pengguna. Di Flutter, ini termasuk widget, pages, dan manajemen state seperti `Provider`, `Riverpod`, atau `Bloc`.
+
+- Lapisan Bisnis (Domain Layer): Ini adalah lapisan yang berisi aturan bisnis dan logika aplikasi. Tidak bergantung pada framework atau teknologi tertentu.
+Implementasi:
+Entities: Mendefinisikan objek bisnis atau entitas.
+Use Cases: Mendefinisikan aturan bisnis atau skenario penggunaan.
+Repositories: Menentukan kontrak antarmuka untuk mengakses data.
+
+- Lapisan Data (Data Layer): Ini adalah lapisan yang bertanggung jawab untuk mengakses data dari berbagai sumber seperti API, database, atau penyimpanan lokal.
+Implementasi:
+Data Sources: Mengimplementasikan cara akses data (remote dan local).
+Repositories Implementation: Mengimplementasikan kontrak dari repository di lapisan domain.
+
+</details>
+
+<details>
 <summary>Tugas 7 PBP</summary>
 <br>
 

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+// Impor drawer widget
+import 'package:minventory/widgets/left_drawer.dart';
+import 'package:minventory/widgets/prompt_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
-  final List<ItemBox> items = [
-    ItemBox("Lihat Item", Icons.checklist),
-    ItemBox("Tambah Item", Icons.add_box_rounded),
-    ItemBox("Logout", Icons.logout),
+  final List<InventoryPrompt> items = [
+    InventoryPrompt("Lihat Item", Icons.checklist),
+    InventoryPrompt("Tambah Item", Icons.add_box_rounded),
+    InventoryPrompt("Logout", Icons.logout),
   ];
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -23,10 +26,13 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'minventory',
+          'Minventory',
         ),
         backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
       ),
+      // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
@@ -55,76 +61,12 @@ class MyHomePage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                children: items.map((ItemBox item) {
+                children: items.map((InventoryPrompt item) {
                   // Iterasi untuk setiap item
-                  return Card(item);
+                  return PromptCard(item);
                 }).toList(),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ItemBox {
-  final String name;
-  final IconData icon;
-
-  ItemBox(this.name, this.icon);
-}
-
-class Card extends StatelessWidget {
-  final ItemBox item;
-
-  const Card(this.item, {super.key}); // Constructor
-
-  @override
-  Widget build(BuildContext context) {
-
-    Color backgroundColor;
-    if (item.name == "Lihat Item") {
-      backgroundColor = Colors.red;
-    } else if (item.name == "Tambah Item") {
-      backgroundColor = Colors.green;
-    } else if (item.name == "Logout") {
-      backgroundColor = Colors.blue;
-    } else {
-      backgroundColor = Colors.indigo;
-    }
-
-    return Material(
-      child: InkWell(
-        // Area responsive terhadap sentuhan
-        onTap: () {
-          // Memunculkan SnackBar ketika diklik
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!")));
-        },
-        child: Container(
-          // Container untuk menyimpan Icon dan Text
-          color: backgroundColor,
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
           ),
         ),
       ),

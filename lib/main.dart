@@ -1,4 +1,4 @@
-import 'package:minventory/menu.dart';
+import 'package:minventory/screens/menu.dart';
 import 'package:flutter/material.dart';
 
 void main() {
