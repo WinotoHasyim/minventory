@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minventory/screens/menu.dart';
 import 'package:minventory/screens/inventory_form.dart';
-import 'package:minventory/screens/inventory_list.dart';
+import 'package:minventory/screens/list_item.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -53,13 +53,13 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.check_box),
-            title: const Text('Lihat Item'),
+            title: const Text('Daftar Item'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => InventoryListPage(),
+                    builder: (context) => const ItemPage(),
                   ));
             },
           ),

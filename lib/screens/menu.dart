@@ -7,9 +7,9 @@ class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
   final List<InventoryPrompt> items = [
-    InventoryPrompt("Lihat Item", Icons.checklist),
-    InventoryPrompt("Tambah Item", Icons.add_box_rounded),
-    InventoryPrompt("Logout", Icons.logout),
+    InventoryPrompt("Lihat Item", Icons.checklist, Colors.red),
+    InventoryPrompt("Tambah Item", Icons.add_box_rounded, Colors.green),
+    InventoryPrompt("Logout", Icons.logout, Colors.blue),
   ];
 
   // This widget is the home page of your application. It is stateful, meaning
