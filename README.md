@@ -606,6 +606,7 @@ Widget build(BuildContext context) {
 ...
 ```
 Jangan lupa untuk menambahkan potongan kode berikut untuk menambah fungsionalitas ke button logout:
+```
 else if (item.name == "Logout") {
   final response = await request.logout(
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
@@ -627,6 +628,7 @@ else if (item.name == "Logout") {
     ));
   }
 }
+```
 
 20. Impor file yang dibutuhkan saat menambahkan ItemPage ke `left_drawer.dart`
 
