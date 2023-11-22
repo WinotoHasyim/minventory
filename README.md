@@ -904,7 +904,7 @@ class _RegisterPageState extends State<RegisterPage> {
 ```
 Kode ini berfungsi untuk menampilkan UI untuk halaman register
 
-24. Melakukan `add-commit-push` ke GitHub.
+24. Melakukan `add-commit-push` ke GitHub
 
 ## Pertanyaan
 
